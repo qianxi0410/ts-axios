@@ -1,0 +1,25 @@
+{
+	"env": {
+		"browser": true,
+		"es2021": true
+	},
+	"plugins": ["@typescript-eslint"],
+	"extends": [
+		"eslint:recommended",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:prettier/recommended"
+	],
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"ecmaVersion": 12,
+		"sourceType": "module"
+	},
+	"rules": {
+		"indent": ["error", "tab"],
+		"linebreak-style": ["error", "windows"],
+		"quotes": ["error", "single"],
+		"prettier/prettier": "error",
+		"eqeqeq": "error",
+		"semi": "off"
+	}
+}
