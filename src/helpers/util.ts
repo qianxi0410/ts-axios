@@ -8,3 +8,8 @@ export function isDate(val: any): val is Date {
 export function isObject(val: any): val is Object {
 	return val !== null && typeof val === 'object'
 }
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export function isPlainObject(val: any): val is Object {
+	return toString.call(val) === '[object Object]'
+}
