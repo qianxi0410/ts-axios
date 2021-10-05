@@ -28,6 +28,7 @@ export interface AxiosRequestConfig {
 	params?: any
 	headers?: any
 	responseType?: XMLHttpRequestResponseType
+	timeout?: number
 }
 
 export interface AxiosResponse {

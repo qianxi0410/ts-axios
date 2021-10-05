@@ -3,9 +3,13 @@ import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from './types'
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
 	return new Promise((resolve, reject) => {
-		const { data = null, url, method = 'get', responseType } = config
+		const { data = null, url, method = 'get', responseType, timeout } = config
 
 		const request = new XMLHttpRequest()
+
+		if (timeout) {
+			request.timeout = timeout
+		}
 
 		if (responseType) {
 			request.responseType = responseType
@@ -34,6 +38,10 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
 
 		request.onerror = function handleError() {
 			reject(new Error('Network Error'))
+		}
+
+		request.ontimeout = function handleTimeout() {
+			reject(new Error(`Timeout of ${timeout} ms exceeded`))
 		}
 
 		Object.keys(config.headers).forEach(name => {
