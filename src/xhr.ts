@@ -2,7 +2,7 @@ import { parseHeaders } from './helpers/headers'
 import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from './types'
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
-	return new Promise(resolve => {
+	return new Promise((resolve, reject) => {
 		const { data = null, url, method = 'get', responseType } = config
 
 		const request = new XMLHttpRequest()
@@ -30,6 +30,10 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
 				request
 			}
 			resolve(response)
+		}
+
+		request.onerror = function handleError() {
+			reject(new Error('Network Error'))
 		}
 
 		Object.keys(config.headers).forEach(name => {
