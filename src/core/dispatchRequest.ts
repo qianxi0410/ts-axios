@@ -1,11 +1,13 @@
 import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from '../types'
 import xhr from '../xhr'
 import { bulidURL } from '../helpers/url'
-import { transformRequest, transformResponse } from '../helpers/data'
+import { transformRequest } from '../helpers/data'
 import { flattenHeaders, processHeaders } from '../helpers/headers'
 import transform from './transform'
 
 export default function axios(config: AxiosRequestConfig): AxiosPromise {
+	throwIfCancellationRequested(config)
+
 	processConfig(config)
 	return xhr(config).then(res => {
 		return transformResponseData(res)
@@ -15,6 +17,12 @@ export default function axios(config: AxiosRequestConfig): AxiosPromise {
 function transformResponseData(res: AxiosResponse): AxiosResponse {
 	res.data = transform(res.data, res.headers, res.config.transformResponse)
 	return res
+}
+
+function throwIfCancellationRequested(config: AxiosRequestConfig): void {
+	if (config.cancelToken) {
+		config.cancelToken.throwIfRequested()
+	}
 }
 
 function processConfig(config: AxiosRequestConfig): void {

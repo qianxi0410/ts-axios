@@ -4,9 +4,16 @@ import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from './types'
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
 	return new Promise((resolve, reject) => {
-		const { data = null, url, method = 'get', responseType, timeout } = config
+		const { data = null, url, method = 'get', responseType, timeout, cancelToken } = config
 
 		const request = new XMLHttpRequest()
+
+		if (cancelToken) {
+			cancelToken.promise.then(resason => {
+				request.abort()
+				reject(resason)
+			})
+		}
 
 		if (timeout) {
 			request.timeout = timeout
@@ -16,7 +23,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
 			request.responseType = responseType
 		}
 
-		request.open(method.toUpperCase(), url, true)
+		request.open(method.toUpperCase(), url!, true)
 
 		request.onreadystatechange = function handleLoad() {
 			if (request.readyState !== 4) {
