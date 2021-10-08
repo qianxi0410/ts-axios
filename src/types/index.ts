@@ -55,6 +55,8 @@ export interface AxiosRequestConfig {
 	xsrfCookieName?: string
 
 	xsrfHeaderName?: string
+
+	baseURL?: string
 }
 
 export interface CancelToken {

@@ -1,6 +1,6 @@
 import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from '../types'
 import xhr from '../xhr'
-import { bulidURL } from '../helpers/url'
+import { bulidURL, combineURL, isAbsoluteURL } from '../helpers/url'
 import { transformRequest } from '../helpers/data'
 import { flattenHeaders, processHeaders } from '../helpers/headers'
 import transform from './transform'
@@ -41,6 +41,10 @@ function transformRequestData(config: AxiosRequestConfig): void {
 }
 
 function transformUrl(config: AxiosRequestConfig): string {
-	const { url = '/', params } = config
-	return bulidURL(url, params)
+	// eslint-disable-next-line prefer-const
+	let { url, baseURL, params } = config
+	if (baseURL && !isAbsoluteURL(url!)) {
+		url = combineURL(baseURL, url)
+	}
+	return bulidURL(url!, params)
 }
